@@ -24,6 +24,7 @@ func (m *multiConfigurator[T]) OneOf() (cfg T, err error) {
 }
 
 // OneOfFill fills the provided config pointer with the result of OneOf method.
+// Note that all fields of cfg will be overridden by new values.
 func (m *multiConfigurator[T]) OneOfFill(cfg *T) (err error) {
 	*cfg, err = m.OneOf()
 	return
@@ -46,6 +47,7 @@ func (m *multiConfigurator[T]) AllOf() (cfg T, err error) {
 }
 
 // AllOfFill fills the provided config pointer with the result of AllOf method.
+// Note that all fields of cfg will be overridden by new values.
 func (m *multiConfigurator[T]) AllOfFill(cfg *T) (err error) {
 	*cfg, err = m.AllOf()
 	return

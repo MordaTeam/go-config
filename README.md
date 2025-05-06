@@ -1,8 +1,12 @@
 # 🛠️ go-config: Universal Configuration Library for Go
 
-[![Go Reference](https://pkg.go.dev/badge/github.com/hikitani/go-config.svg)](https://pkg.go.dev/github.com/hikitani/go-config)
-[![Go Report Card](https://goreportcard.com/badge/github.com/hikitani/go-config)](https://goreportcard.com/report/github.com/hikitani/go-config)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+<p align="center">
+    <img src="https://img.shields.io/github/license/MordaTeam/go-config" alt="License">
+    <img alt="Static Badge" src="https://img.shields.io/badge/lang-golang-blue">
+    <a href='https://coveralls.io/github/MordaTeam/go-config?branch=main'><img src='https://coveralls.io/repos/github/MordaTeam/go-config/badge.svg?branch=main' alt='Coverage Status' /></a>
+    <a href="https://goreportcard.com/report/github.com/MordaTeam/go-config"><img src="https://goreportcard.com/badge/github.com/MordaTeam/go-config" alt="Go Reference"></a>
+    <a href="https://pkg.go.dev/github.com/MordaTeam/go-config"><img src="https://pkg.go.dev/badge/github.com/MordaTeam/go-config.svg" alt="Go Reference"></a>
+</p>
 
 `go-config` is a universal library for Go that simplifies working with configuration files and data from various sources. The library provides a flexible interface for loading, decoding, and merging configurations.
 
@@ -35,7 +39,7 @@
 ## 📦 Installation
 
 ```bash
-go get github.com/hikitani/go-config
+go get github.com/MordaTeam/go-config
 ```
 
 ---
