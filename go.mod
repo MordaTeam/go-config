@@ -1,4 +1,4 @@
-module github.com/hikitani/go-config
+module github.com/MordaTeam/go-config
 
 go 1.23.4
 

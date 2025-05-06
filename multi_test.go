@@ -6,7 +6,7 @@ import (
 	"testing"
 	"testing/iotest"
 
-	"github.com/hikitani/go-config"
+	"github.com/MordaTeam/go-config"
 	"github.com/stretchr/testify/require"
 )
 

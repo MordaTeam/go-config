@@ -5,9 +5,9 @@ import (
 	"io"
 	"testing"
 
+	"github.com/MordaTeam/go-config"
 	"github.com/docker/go-connections/nat"
 	"github.com/hashicorp/consul/api"
-	"github.com/hikitani/go-config"
 	"github.com/stretchr/testify/require"
 	"github.com/testcontainers/testcontainers-go/modules/consul"
 	"github.com/testcontainers/testcontainers-go/network"
@@ -59,14 +59,14 @@ func TestConsulProvider(t *testing.T) {
 	})
 
 	t.Run("CustomClient", func(t *testing.T) {
-	dataReader, err := config.
-		FromConsul("/foo/bar", config.ConsulWithClient(client)).
-		ProvideConfig()
-	r.NoError(err)
+		dataReader, err := config.
+			FromConsul("/foo/bar", config.ConsulWithClient(client)).
+			ProvideConfig()
+		r.NoError(err)
 
-	data, err := io.ReadAll(dataReader)
-	r.NoError(err)
+		data, err := io.ReadAll(dataReader)
+		r.NoError(err)
 
-	r.Equal([]byte(`{"foo": "bar"}`), data)
+		r.Equal([]byte(`{"foo": "bar"}`), data)
 	})
 }

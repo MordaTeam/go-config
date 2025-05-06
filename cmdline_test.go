@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/hikitani/go-config"
+	"github.com/MordaTeam/go-config"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
