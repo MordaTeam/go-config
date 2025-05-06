@@ -32,9 +32,10 @@ func TestConsulProvider(t *testing.T) {
 	port, err := consulContainer.MappedPort(ctx, nat.Port("8500"))
 	r.NoError(err)
 
-	client, err := api.NewClient(&api.Config{
+	clientCfg := &api.Config{
 		Address: ip + ":" + port.Port(),
-	})
+	}
+	client, err := api.NewClient(clientCfg)
 	r.NoError(err)
 
 	_, err = client.KV().Put(&api.KVPair{
@@ -43,6 +44,21 @@ func TestConsulProvider(t *testing.T) {
 	}, &api.WriteOptions{})
 	r.NoError(err)
 
+	t.Run("DefaultClient", func(t *testing.T) {
+		t.Setenv("CONSUL_HTTP_ADDR", clientCfg.Address)
+
+		dataReader, err := config.
+			FromConsul("/foo/bar").
+			ProvideConfig()
+		r.NoError(err)
+
+		data, err := io.ReadAll(dataReader)
+		r.NoError(err)
+
+		r.Equal([]byte(`{"foo": "bar"}`), data)
+	})
+
+	t.Run("CustomClient", func(t *testing.T) {
 	dataReader, err := config.
 		FromConsul("/foo/bar", config.ConsulWithClient(client)).
 		ProvideConfig()
@@ -52,4 +68,5 @@ func TestConsulProvider(t *testing.T) {
 	r.NoError(err)
 
 	r.Equal([]byte(`{"foo": "bar"}`), data)
+	})
 }
