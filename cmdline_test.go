@@ -2,6 +2,7 @@ package config_test
 
 import (
 	"os"
+	"path"
 	"strings"
 	"testing"
 
@@ -41,7 +42,7 @@ Help Options:
 
 `
 
-	tmpfile, err := os.CreateTemp("", "test-stdout-*")
+	tmpfile, err := os.Create(path.Join(t.TempDir(), "test-stdout"))
 	require.NoError(t, err)
 	t.Cleanup(func() { _ = tmpfile.Close() })
 	os.Stdout = tmpfile
