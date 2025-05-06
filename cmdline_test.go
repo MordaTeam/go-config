@@ -44,8 +44,12 @@ Help Options:
 
 	tmpfile, err := os.Create(path.Join(t.TempDir(), "test-stdout"))
 	require.NoError(t, err)
-	t.Cleanup(func() { _ = tmpfile.Close() })
+	stdout := os.Stdout
 	os.Stdout = tmpfile
+	t.Cleanup(func() {
+		_ = tmpfile.Close()
+		os.Stdout = stdout
+	})
 
 	defer func() {
 		// os.Exit catching
