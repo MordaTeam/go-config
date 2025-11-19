@@ -5,9 +5,9 @@ import (
 	"errors"
 	"fmt"
 	"io"
-)
 
-type ConfigOption func(*cfgOpts) error
+	"github.com/MordaTeam/go-toolbox/options"
+)
 
 // ConfigProvider is an interface that provides configuration data.
 type ConfigProvider interface {
@@ -25,7 +25,7 @@ type cfgOpts struct {
 }
 
 // WithDecoder is an option that overrides the default decoder. By default, it uses json.Decoder.
-func WithDecoder[D Decoder](newDec func(r io.Reader) D) ConfigOption {
+func WithDecoder[D Decoder](newDec func(r io.Reader) D) options.Option[cfgOpts] {
 	return func(v *cfgOpts) error {
 		v.newDec = func(r io.Reader) Decoder {
 			return newDec(r)
@@ -37,7 +37,7 @@ func WithDecoder[D Decoder](newDec func(r io.Reader) D) ConfigOption {
 // Creates config T where provider provides data for decoding. By default, it uses json.Decoder.
 // Use WithDecoder to override the decoder. If the reader implements the io.Closer interface, then
 // it will be closed.
-func New[T any](provider ConfigProvider, opts ...ConfigOption) (cfg T, err error) {
+func New[T any](provider ConfigProvider, opts ...options.Option[cfgOpts]) (cfg T, err error) {
 	r, err := provider.ProvideConfig()
 	if err != nil {
 		return cfg, fmt.Errorf("provide config: %w", err)
@@ -99,7 +99,7 @@ func New[T any](provider ConfigProvider, opts ...ConfigOption) (cfg T, err error
 //		err := config.Fill(&cfg, config.FromConsul"/bar/foo"))
 //		//...
 //	}
-func Fill[T any](cfg *T, provider ConfigProvider, opts ...ConfigOption) error {
+func Fill[T any](cfg *T, provider ConfigProvider, opts ...options.Option[cfgOpts]) error {
 	newCfg, err := New[T](provider, opts...)
 	if err != nil {
 		return fmt.Errorf("create config: %w", err)

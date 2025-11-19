@@ -48,7 +48,7 @@ func TestMulti_AllOf(t *testing.T) {
 		AllOf()
 	r.NoError(err)
 	r.Equal(testMultiConfig{
-		Foo:  "env_foo",
+		Foo:  "file_foo",
 		Bar:  "file_bar",
 		Port: 8080,
 	}, cfg)
@@ -63,7 +63,7 @@ func TestMulti_AllOf(t *testing.T) {
 		AllOf()
 	r.NoError(err)
 	r.Equal(testMultiConfig{
-		Foo:  "file_foo",
+		Foo:  "env_foo",
 		Bar:  "file_bar",
 		Port: 8080,
 	}, cfg)
