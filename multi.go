@@ -1,8 +1,12 @@
 package config
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
+
+	"github.com/MordaTeam/go-toolbox/options"
 )
 
 type multiConfigurator[T any] struct {
@@ -54,13 +58,15 @@ func (m *multiConfigurator[T]) AllOfFill(cfg *T) (err error) {
 }
 
 // Add adds configurator to build config.
-func (m *multiConfigurator[T]) Add(provider ConfigProvider, opts ...ConfigOption) *multiConfigurator[T] {
+func (m *multiConfigurator[T]) Add(provider ConfigProvider, opts ...options.Option[cfgOpts]) *multiConfigurator[T] {
 	m.configurators = append(m.configurators, newConfigurator[T](provider, opts...))
 	return m
 }
 
 // Multi creates multi configurator that aggregates different methods of creating config.
 // Use method .Add to add configurator, then call .OneOf or .AllOf method to build config.
+//
+// NOTE: result depends on providers order. If parameter is provided by multiple of them, the last wins.
 //
 // Example
 //
@@ -75,8 +81,29 @@ func Multi[T any]() *multiConfigurator[T] {
 
 type configurator[T any] func(cfg *T) error
 
-func newConfigurator[T any](provider ConfigProvider, opts ...ConfigOption) configurator[T] {
+func newConfigurator[T any](provider ConfigProvider, opts ...options.Option[cfgOpts]) configurator[T] {
 	return func(cfg *T) error {
-		return Fill(cfg, provider, opts...)
+		r, err := provider.ProvideConfig()
+		if err != nil {
+			return fmt.Errorf("provide config: %w", err)
+		}
+
+		cfgOpts := cfgOpts{
+			newDec: func(r io.Reader) Decoder {
+				return json.NewDecoder(r)
+			},
+		}
+
+		if err := options.ApplyOptions(&cfgOpts, opts...); err != nil {
+			return fmt.Errorf("init options: %w", err)
+		}
+
+		dec := cfgOpts.newDec(r)
+		err = dec.Decode(cfg)
+		if err != nil {
+			return fmt.Errorf("decode config: %w", err)
+		}
+
+		return nil
 	}
 }

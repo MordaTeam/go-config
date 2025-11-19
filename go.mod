@@ -1,8 +1,9 @@
 module github.com/MordaTeam/go-config
 
-go 1.22.12
+go 1.24.2
 
 require (
+	github.com/MordaTeam/go-toolbox v1.0.0
 	github.com/docker/go-connections v0.5.0
 	github.com/go-ini/ini v1.67.0
 	github.com/stretchr/testify v1.10.0
@@ -68,7 +69,7 @@ require (
 	go.opentelemetry.io/otel/trace v1.24.0 // indirect
 	golang.org/x/crypto v0.31.0 // indirect
 	golang.org/x/exp v0.0.0-20250106191152-7588d65b2ba8 // indirect
-	golang.org/x/sys v0.29.0 // indirect
+	golang.org/x/sys v0.30.0 // indirect
 )
 
 require (
