@@ -4,6 +4,7 @@ go 1.22.12
 
 require (
 	github.com/docker/go-connections v0.5.0
+	github.com/go-ini/ini v1.67.0
 	github.com/stretchr/testify v1.10.0
 	github.com/testcontainers/testcontainers-go/modules/consul v0.35.0
 )
