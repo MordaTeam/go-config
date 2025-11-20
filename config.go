@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"os"
 
 	"github.com/MordaTeam/go-toolbox/options"
 )
@@ -50,7 +51,7 @@ func New[T any](provider ConfigProvider, opts ...options.Option[cfgOpts]) (cfg T
 		}
 
 		closeErr := r.Close()
-		if closeErr != nil {
+		if closeErr != nil && !errors.Is(closeErr, os.ErrClosed) {
 			closeErr = fmt.Errorf("close reader: %w", closeErr)
 		}
 
