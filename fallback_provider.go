@@ -15,7 +15,7 @@ type fallbackProvider struct {
 // Creates new fallback line of providers.
 // Call for ProvideConfig() returns first successfull result of ProvideConfig() call of internal provider.
 // If all internal providers fail, return resulting error.
-func FallbackProvider(prs ...ConfigProvider) ConfigProvider {
+func FallbackProvider(prs ...ConfigProvider) *fallbackProvider {
 	return &fallbackProvider{
 		providers: prs,
 	}
