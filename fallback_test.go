@@ -43,6 +43,16 @@ func TestFallback(t *testing.T) {
 			require.Empty(t, cfg)
 		},
 	)
+
+	t.Run(
+		"NilPrInChain",
+		func(t *testing.T) {
+			fb := config.FallbackProvider(nil, okProvider())
+			cfg, err := config.New[fbConfig](fb)
+			require.NoError(t, err)
+			require.Equal(t, expOkCfg, cfg)
+		},
+	)
 }
 
 type fbConfig struct {

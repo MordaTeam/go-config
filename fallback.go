@@ -24,6 +24,10 @@ func FallbackProvider(prs ...ConfigProvider) ConfigProvider {
 func (p *fallbackProvider) ProvideConfig() (io.Reader, error) {
 	var resErr error
 	for idx, pr := range p.providers {
+		if pr == nil {
+			continue
+		}
+
 		r, err := pr.ProvideConfig()
 		if err != nil {
 			resErr = errors.Join(resErr, fmt.Errorf("provider %d: %w", idx, err))
