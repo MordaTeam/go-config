@@ -51,3 +51,10 @@ func (dec *fallbackDecoder) Decode(v any) error {
 
 	return resErr
 }
+
+// Use this function to pass decoders to FallbackDecoder.
+func DecoderWrap[D Decoder](src func(io.Reader) D) func(io.Reader) Decoder {
+	return func(r io.Reader) Decoder {
+		return src(r)
+	}
+}

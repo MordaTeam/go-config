@@ -17,7 +17,11 @@ func TestFallbackDecoder(t *testing.T) {
 	t.Run(
 		"Normal_OkFirst",
 		func(t *testing.T) {
-			fb := config.FallbackDecoder(okDecoder, errDecoder)(reader())
+			fb := config.FallbackDecoder(
+				config.DecoderWrap(okDecoder),
+				config.DecoderWrap(errDecoder),
+			)(reader())
+
 			cfg := fbConfig{}
 			err := fb.Decode(&cfg)
 			require.NoError(t, err)
@@ -28,7 +32,11 @@ func TestFallbackDecoder(t *testing.T) {
 	t.Run(
 		"Normal_ErrFirst",
 		func(t *testing.T) {
-			fb := config.FallbackDecoder(errDecoder, okDecoder)(reader())
+			fb := config.FallbackDecoder(
+				config.DecoderWrap(errDecoder),
+				config.DecoderWrap(okDecoder),
+			)(reader())
+
 			cfg := fbConfig{}
 			err := fb.Decode(&cfg)
 			require.NoError(t, err)
@@ -39,7 +47,11 @@ func TestFallbackDecoder(t *testing.T) {
 	t.Run(
 		"Fail",
 		func(t *testing.T) {
-			fb := config.FallbackDecoder(errDecoder, errDecoder)(reader())
+			fb := config.FallbackDecoder(
+				config.DecoderWrap(errDecoder),
+				config.DecoderWrap(errDecoder),
+			)(reader())
+
 			cfg := fbConfig{}
 			err := fb.Decode(&cfg)
 			require.Error(t, err)
@@ -50,7 +62,11 @@ func TestFallbackDecoder(t *testing.T) {
 	t.Run(
 		"NilPrInChain",
 		func(t *testing.T) {
-			fb := config.FallbackDecoder(nil, okDecoder)(reader())
+			fb := config.FallbackDecoder(
+				nil,
+				config.DecoderWrap(okDecoder),
+			)(reader())
+
 			cfg := fbConfig{}
 			err := fb.Decode(&cfg)
 			require.NoError(t, err)
@@ -61,7 +77,11 @@ func TestFallbackDecoder(t *testing.T) {
 	t.Run(
 		"AllNils",
 		func(t *testing.T) {
-			fb := config.FallbackDecoder(nil, nil)(reader())
+			fb := config.FallbackDecoder(
+				nil,
+				nil,
+			)(reader())
+
 			cfg := fbConfig{}
 			err := fb.Decode(&cfg)
 			require.Error(t, err)
@@ -76,11 +96,11 @@ func (p *errDec) Decode(any) error {
 	return errors.New("something went wrong")
 }
 
-func errDecoder(r io.Reader) config.Decoder {
+func errDecoder(r io.Reader) *errDec {
 	return &errDec{}
 }
 
-func okDecoder(r io.Reader) config.Decoder {
+func okDecoder(r io.Reader) *json.Decoder {
 	return json.NewDecoder(r)
 }
 
