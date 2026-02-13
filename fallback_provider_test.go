@@ -10,7 +10,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestFallback(t *testing.T) {
+func TestFallbackProvider(t *testing.T) {
 	errProvider := &errProvider{}
 	expOkCfg := fbConfig{Foo: "bar"}
 
