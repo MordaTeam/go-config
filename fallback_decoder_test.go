@@ -18,7 +18,7 @@ func TestFallbackDecoder(t *testing.T) {
 	t.Run(
 		"Normal_OkFirst",
 		func(t *testing.T) {
-			fb := config.FallbackDecoder(okDecoder(reader()), errDec)
+			fb := config.FallbackDecoder(okDecoder(reader()), errDec)(nil)
 			cfg := fbConfig{}
 			err := fb.Decode(&cfg)
 			require.NoError(t, err)
@@ -29,7 +29,7 @@ func TestFallbackDecoder(t *testing.T) {
 	t.Run(
 		"Normal_ErrFirst",
 		func(t *testing.T) {
-			fb := config.FallbackDecoder(errDec, okDecoder(reader()))
+			fb := config.FallbackDecoder(errDec, okDecoder(reader()))(nil)
 			cfg := fbConfig{}
 			err := fb.Decode(&cfg)
 			require.NoError(t, err)
@@ -40,7 +40,7 @@ func TestFallbackDecoder(t *testing.T) {
 	t.Run(
 		"Fail",
 		func(t *testing.T) {
-			fb := config.FallbackDecoder(errDec, errDec)
+			fb := config.FallbackDecoder(errDec, errDec)(nil)
 			cfg := fbConfig{}
 			err := fb.Decode(&cfg)
 			require.Error(t, err)
@@ -51,7 +51,7 @@ func TestFallbackDecoder(t *testing.T) {
 	t.Run(
 		"NilPrInChain",
 		func(t *testing.T) {
-			fb := config.FallbackDecoder(nil, okDecoder(reader()))
+			fb := config.FallbackDecoder(nil, okDecoder(reader()))(nil)
 			cfg := fbConfig{}
 			err := fb.Decode(&cfg)
 			require.NoError(t, err)
@@ -62,7 +62,7 @@ func TestFallbackDecoder(t *testing.T) {
 	t.Run(
 		"AllNils",
 		func(t *testing.T) {
-			fb := config.FallbackDecoder(nil, nil)
+			fb := config.FallbackDecoder(nil, nil)(nil)
 			cfg := fbConfig{}
 			err := fb.Decode(&cfg)
 			require.Error(t, err)

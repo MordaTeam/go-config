@@ -3,6 +3,7 @@ package config
 import (
 	"errors"
 	"fmt"
+	"io"
 )
 
 var _ Decoder = &fallbackDecoder{}
@@ -14,8 +15,10 @@ type fallbackDecoder struct {
 // Creates new fallback line of decoders.
 // Call for Decode() returns first successfull result of Decode() call of internal decoder.
 // If all internal decoders fail, return resulting error.
-func FallbackDecoder(decs ...Decoder) *fallbackDecoder {
-	return &fallbackDecoder{decs: decs}
+func FallbackDecoder(decs ...Decoder) func(io.Reader) *fallbackDecoder {
+	return func(r io.Reader) *fallbackDecoder {
+		return &fallbackDecoder{decs: decs}
+	}
 }
 
 func (dec *fallbackDecoder) Decode(v any) error {
