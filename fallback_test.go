@@ -53,6 +53,16 @@ func TestFallback(t *testing.T) {
 			require.Equal(t, expOkCfg, cfg)
 		},
 	)
+
+	t.Run(
+		"AllNils",
+		func(t *testing.T) {
+			fb := config.FallbackProvider(nil, nil)
+			cfg, err := config.New[fbConfig](fb)
+			require.Error(t, err)
+			require.Empty(t, cfg)
+		},
+	)
 }
 
 type fbConfig struct {

@@ -25,6 +25,7 @@ func (p *fallbackProvider) ProvideConfig() (io.Reader, error) {
 	var resErr error
 	for idx, pr := range p.providers {
 		if pr == nil {
+			resErr = errors.Join(resErr, fmt.Errorf("nil provider on pos %d", idx))
 			continue
 		}
 
